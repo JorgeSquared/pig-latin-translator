@@ -6,6 +6,7 @@ namespace App\Presenters;
 
 use Nette;
 use Nette\Application\UI\Form;
+use Nette\Utils\Strings;
 
 
 final class HomepagePresenter extends Nette\Application\UI\Presenter
@@ -45,6 +46,7 @@ final class HomepagePresenter extends Nette\Application\UI\Presenter
         foreach ($translations as $translation) {
             $translationId = $translation->id;
             $this->db->table('translations')
+                ->where('id', $translationId)
                 ->update([
                     'translation' => $this->translateIntoPigLatin($translation->content),
                 ]);
@@ -57,6 +59,25 @@ final class HomepagePresenter extends Nette\Application\UI\Presenter
 
     private function translateIntoPigLatin(string $origin): string
     {
-        return strrev($origin);
+        //we are brave (or silly?) and truncate special characters also,
+        //so that our future selves can have hard times to restore the text
+        //from piggy latin back to english, with the correct punctuation letters
+        $cleanInput = Strings::webalize(Strings::lower(Strings::trim($origin)));
+        $wordsToTranslate = explode('-', $cleanInput);
+
+        //First rule of Piggy Latin: we don't want to append "ay" to words
+        //that formally start with a vowel (like 'you', which phonetically starts
+        //with 'u' consonant in fact), and, on the other hand, we definitely
+        //want to append "ay" to words that formally look like starting with
+        //a consonant but phonetically start with a vowel, like 'x-ray'
+        $vowelPattern = '/^([aeiou]|xr|yt).*/';
+
+        foreach ($wordsToTranslate as $key => $wordToTranslate) {
+            if (preg_match($vowelPattern, $wordToTranslate)) {
+                $wordsToTranslate[$key] .= 'ay';
+            }
+        }
+
+        return implode(' ', $wordsToTranslate);
     }
 }
