@@ -20,7 +20,8 @@ Requirements
 
 - Web Project for Nette 3.1 requires at least PHP 7.2,
 however for a smooth user experience, we recommend to run
-the app under PHP 7.4 at least, or higher.
+the app under PHP 8.0 at least (due to some syntactic
+sugar used in the code).
 - You shall need user privileges that enable you to create
 MySQL databases that communicate with the PHP built-in webserver
 on host `localhost`, port `3306`, or an euivalent of it (a docker LAMP

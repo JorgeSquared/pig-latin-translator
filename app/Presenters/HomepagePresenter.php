@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Presenters;
 
+use App\Model\TranslationFacade;
 use Nette;
 use Nette\Application\UI\Form;
 use Nette\Utils\Strings;
@@ -12,7 +13,7 @@ use Nette\Utils\Strings;
 final class HomepagePresenter extends Nette\Application\UI\Presenter
 {
     public function __construct(
-        private Nette\Database\Explorer $db,
+        private readonly TranslationFacade $translationFacade,
     )
     {
     }
@@ -33,23 +34,17 @@ final class HomepagePresenter extends Nette\Application\UI\Presenter
 
     public function translationFormSucceeded(\stdClass $data): void
     {
-        $this->db->table('translations')
-            ->insert([
-                'content' => $data->content,
-            ]);
+        $this->translationFacade->insertContentToTranslate($data);
 
-        $translations = $this->db->table('translations')
-            ->order('id DESC')
-            ->limit(1);
+        $translations = $this->translationFacade->getTranslations(1);
 
         $translationId = 1;
         foreach ($translations as $translation) {
             $translationId = $translation->id;
-            $this->db->table('translations')
-                ->where('id', $translationId)
-                ->update([
-                    'translation' => $this->translateIntoPigLatin($translation->content),
-                ]);
+            $this->translationFacade->saveTranslationContentByTranslationId(
+                $this->translateIntoPigLatin($translation->content),
+                $translationId,
+            );
         }
 
         $this->flashMessage('Your text in Pig Latin:', 'success');
