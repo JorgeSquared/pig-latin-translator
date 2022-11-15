@@ -108,3 +108,11 @@ could run the command
 ./vendor/bin/phpunit tests/PigLatinTest.php
 ```
 and see whether the translator works as expected :smile: 
+
+PHPStan Analysis
+------------------
+To run the statical analysis of the code, we can run the command
+```shell
+vendor/bin/phpstan analyse -l 8 app tests
+```
+(which will find some errors, since the code is by far not complete)

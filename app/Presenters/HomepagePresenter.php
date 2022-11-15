@@ -8,7 +8,6 @@ use App\Model\TranslationFacade;
 use App\Model\TranslationModel;
 use Nette;
 use Nette\Application\UI\Form;
-use Nette\Utils\Strings;
 
 
 final class HomepagePresenter extends Nette\Application\UI\Presenter
