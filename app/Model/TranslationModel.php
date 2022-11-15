@@ -39,15 +39,12 @@ class TranslationModel
 
         foreach ($wordsToTranslate as $key => $wordToTranslate) {
             if (preg_match($vowelPattern, $wordToTranslate, $matches)) {
-                $wordsToTranslate[$key] .= 'ay';
-            }
-            if (preg_match($consonantPattern, $wordToTranslate, $matches)) {
-                $wordsToTranslate[$key] = $matches[2] . '-' . $matches[1] . 'ay';
-            }
-            if (preg_match($consonantQuPattern, $wordToTranslate, $matches)) {
+                $wordsToTranslate[$key] = $matches[1] . $matches[2] . 'ay';
+            } elseif (preg_match($consonantQuPattern, $wordToTranslate, $matches)) {
                 $wordsToTranslate[$key] = $matches[3] . '-' . $matches[1] . $matches[2] . 'ay';
-            }
-            if (preg_match($clusterYPattern, $wordToTranslate, $matches)) {
+            } elseif (preg_match($consonantPattern, $wordToTranslate, $matches)) {
+                $wordsToTranslate[$key] = $matches[2] . '-' . $matches[1] . 'ay';
+            } elseif (preg_match($clusterYPattern, $wordToTranslate, $matches)) {
                 $wordsToTranslate[$key] = $matches[2] . $matches[3] . '-' . $matches[1] . 'ay';
             }
         }

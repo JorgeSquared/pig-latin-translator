@@ -45,6 +45,13 @@ download it following [the instructions](https://doc.nette.org/composer). Then u
 
 Make directories `temp/` and `log/` writable (if on Linux).
 
+Install packages
+----------------
+As a de facto composer project, you should definitely first run
+the `composer install` command, after cloning the project itself.
+This will install the neccessary packages needed
+to run the project properly (like PHPUnit, for example).
+
 Creating a database and its structure
 ----------------
 
@@ -91,3 +98,13 @@ the built-in PHP server in the root directory of your project:
 
 Then visit `http://localhost:8000` in your browser to see the Homepage
 and you should be ready to go :rocket: 
+
+Running tests
+-----------------
+
+To check everything works just fine, you
+could run the command
+```shell
+./vendor/bin/phpunit tests/PigLatinTest.php
+```
+and see whether the translator works as expected :smile: 
